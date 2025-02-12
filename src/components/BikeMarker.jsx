@@ -2,15 +2,17 @@ import { Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import { useEffect, useMemo } from 'react'
 
-function BikeMarker({ station, status }) {
+function BikeMarker({ station, status, isNearestBike, isNearestDock }) {
   const { lat, lon, name, address } = station
   const { num_bikes_available, num_docks_available } = status
+  const isNearest = isNearestBike || isNearestDock
 
   const divIcon = useMemo(() => {
     const hasAvailableBikes = num_bikes_available > 0
     return L.divIcon({
       className: '',
-      html: `<div class="bike-marker ${hasAvailableBikes ? 'available' : 'unavailable'}">
+      html: `<div class="bike-marker ${hasAvailableBikes ? 'available' : 'unavailable'} ${isNearest ? 'nearest' : ''}" 
+        style="${isNearest ? 'transform: scale(2);' : ''}">
         ${num_bikes_available}/${num_docks_available}
       </div>`
     })

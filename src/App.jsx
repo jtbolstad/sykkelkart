@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { findNearestAvailableStation } from './utils/stationUtils'
+import { findNearestStationsWithAvailability } from './utils/findNearestStations'
 import { MapContainer, TileLayer, Popup } from 'react-leaflet'
 import { fetchAllStationData } from './services/api'
 import BikeMarker from './components/BikeMarker'
@@ -11,8 +11,9 @@ function App() {
   const [stationStatus, setStationStatus] = useState({})
   const [userPosition, setUserPosition] = useState(null)
 
-  const nearestStation = userPosition ? findNearestAvailableStation(userPosition, stations, stationStatus) : null;
-  console.log('Nearest available station:', nearestStation);
+  const { nearestBike, nearestDock } = userPosition 
+    ? findNearestStationsWithAvailability(userPosition, stations, stationStatus) 
+    : { nearestBike: null, nearestDock: null };
 
   useEffect(() => {
     // Watch user position
@@ -69,6 +70,8 @@ function App() {
             key={station.station_id}
             station={station}
             status={status}
+            isNearestBike={nearestBike && nearestBike.station_id === station.station_id}
+            isNearestDock={nearestDock && nearestDock.station_id === station.station_id}
           />
         )
       })}

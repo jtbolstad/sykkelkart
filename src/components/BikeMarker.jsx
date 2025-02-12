@@ -30,6 +30,8 @@ function BikeMarker({ station, status, isNearestBike, isNearestDock }) {
           <p>{address}</p>
           <p>Available bikes: {num_bikes_available}</p>
           <p>Available docks: {num_docks_available}</p>
+          <p>Lat: {lat}</p>
+          <p>Lon:: {lon}</p>
         </div>
       </Popup>
     </Marker>

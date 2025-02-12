@@ -11,25 +11,25 @@ export const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return R * c; // Distance in kilometers
 };
 
-export const findNearestAvailableStation = (userPosition, stations, stationStatus) => {
-  if (!userPosition || !stations || !stationStatus) return null;
+// export const findNearestAvailableStation = (userPosition, stations, stationStatus) => {
+//   if (!userPosition || !stations || !stationStatus) return null;
 
-  return stations
-    .filter(station => {
-      const status = stationStatus[station.station_id];
-      return status && status.num_bikes_available > 0;
-    })
-    .reduce((nearest, station) => {
-      const distance = calculateDistance(
-        userPosition.lat,
-        userPosition.lng,
-        station.lat,
-        station.lon
-      );
+//   return stations
+//     .filter(station => {
+//       const status = stationStatus[station.station_id];
+//       return status && status.num_bikes_available > 0;
+//     })
+//     .reduce((nearest, station) => {
+//       const distance = calculateDistance(
+//         userPosition.lat,
+//         userPosition.lng,
+//         station.lat,
+//         station.lon
+//       );
 
-      if (!nearest || distance < nearest.distance) {
-        return { station, distance };
-      }
-      return nearest;
-    }, null);
-};
+//       if (!nearest || distance < nearest.distance) {
+//         return { station, distance };
+//       }
+//       return nearest;
+//     }, null);
+// };

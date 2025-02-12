@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen, expect } from '@testing-library/react';
+import { expect } from '@testing-library/jest-dom';
 import App from './App';
 import BikeMarker from './components/BikeMarker';
 import { MapContainer } from 'react-leaflet';

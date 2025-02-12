@@ -7,6 +7,8 @@ import UserPositionMarker from './components/UserPositionMarker'
 import 'leaflet/dist/leaflet.css'
 import { use } from 'react'
 
+const testmodus = true;
+
 function MapClickHandler({ setUserPosition }) {
   useMapEvents({
     click: (e) => {
@@ -39,11 +41,13 @@ function App() {
 
   useEffect(() => {
     // Tilfeldige koordinater for testing
-    setUserPosition({
-      lng: 10.7 + (Math.random() * 0.1),
-      lat: 59.9 + (Math.random() * 0.05)
-    });
-    return;
+    if (testmodus) {
+      setUserPosition({
+        lng: 10.7 + (Math.random() * 0.1),
+        lat: 59.9 + (Math.random() * 0.05)
+      });
+      return;
+    }
     // Watch user position
     if ("geolocation" in navigator) {
       const watchId = navigator.geolocation.watchPosition(

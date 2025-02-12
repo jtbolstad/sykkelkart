@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
+import { findNearestAvailableStation } from './utils/stationUtils'
 import { MapContainer, TileLayer, Popup } from 'react-leaflet'
-import axios from 'axios'
+import { fetchAllStationData } from './services/api'
 import BikeMarker from './components/BikeMarker'
 import UserPositionMarker from './components/UserPositionMarker'
 import 'leaflet/dist/leaflet.css'
@@ -10,9 +11,8 @@ function App() {
   const [stationStatus, setStationStatus] = useState({})
   const [userPosition, setUserPosition] = useState(null)
 
-  console.log('stations:', stations);
-  console.log('stationStatus:', stationStatus);
-  console.log('userPosition:', userPosition);
+  const nearestStation = userPosition ? findNearestAvailableStation(userPosition, stations, stationStatus) : null;
+  console.log('Nearest available station:', nearestStation);
 
   useEffect(() => {
     // Watch user position
@@ -36,25 +36,9 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [stationsResponse, statusResponse] = await Promise.all([
-          axios.get('https://gbfs.urbansharing.com/oslobysykkel.no/station_information.json', {
-            headers: {
-              'Client-Identifier': 'JTBOLSTAD'
-            }
-          }),
-          axios.get('https://gbfs.urbansharing.com/oslobysykkel.no/station_status.json', {
-            headers: {
-              'Client-Identifier': 'JTBOLSTAD'
-            }
-          })
-        ])
-
-        setStations(stationsResponse.data.data.stations)
-        const statusMap = {}
-        statusResponse.data.data.stations.forEach(station => {
-          statusMap[station.station_id] = station
-        })
-        setStationStatus(statusMap)
+        const { stations, stationStatus } = await fetchAllStationData();
+        setStations(stations);
+        setStationStatus(stationStatus);
       } catch (error) {
         console.error('Error fetching data:', error)
       }

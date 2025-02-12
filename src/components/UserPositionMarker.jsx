@@ -6,16 +6,16 @@ function UserPositionMarker({ position }) {
   const divIcon = useMemo(() => {
     return L.divIcon({
       className: 'user-position-marker',
-      html: '📍',
-      iconSize: [24, 24],
-      iconAnchor: [12, 24],
+      html: '<span style="font-size: 60px">📍</span>',
+      iconSize: [60, 60],
+      iconAnchor: [30, 30],
     })
   }, [])
 
   return (
     <Marker position={[position.lat, position.lng]} icon={divIcon}>
       <Popup>
-        Your current location
+        Du er her
       </Popup>
     </Marker>
   )

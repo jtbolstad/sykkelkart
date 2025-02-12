@@ -6,7 +6,7 @@ function UserPositionMarker({ position }) {
   const divIcon = useMemo(() => {
     return L.divIcon({
       className: 'user-position-marker',
-      html: '<span style="font-size: 60px">📍</span>',
+      html: '📍',
       iconSize: [60, 60],
       iconAnchor: [30, 30],
     })

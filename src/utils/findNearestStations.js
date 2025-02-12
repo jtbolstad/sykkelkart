@@ -13,7 +13,7 @@ export const findNearestStationsWithAvailability = (userPosition, stations, stat
       station.lon
     )
   }));
-
+  // console.log('stationsWithDistances:', stationsWithDistances);
   const nearestBike = stationsWithDistances
     .filter(station => {
       const status = stationStatus[station.station_id];
@@ -27,6 +27,6 @@ export const findNearestStationsWithAvailability = (userPosition, stations, stat
       return status && status.num_docks_available > 0;
     })
     .sort((a, b) => a.distance - b.distance)[0];
-
+  
   return { nearestBike, nearestDock };
 };

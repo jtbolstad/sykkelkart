@@ -10,26 +10,3 @@ export const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   return R * c; // Distance in kilometers
 };
-
-// export const findNearestAvailableStation = (userPosition, stations, stationStatus) => {
-//   if (!userPosition || !stations || !stationStatus) return null;
-
-//   return stations
-//     .filter(station => {
-//       const status = stationStatus[station.station_id];
-//       return status && status.num_bikes_available > 0;
-//     })
-//     .reduce((nearest, station) => {
-//       const distance = calculateDistance(
-//         userPosition.lat,
-//         userPosition.lng,
-//         station.lat,
-//         station.lon
-//       );
-
-//       if (!nearest || distance < nearest.distance) {
-//         return { station, distance };
-//       }
-//       return nearest;
-//     }, null);
-// };

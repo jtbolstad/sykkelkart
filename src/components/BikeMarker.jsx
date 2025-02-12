@@ -6,7 +6,7 @@ import { useEffect, useMemo } from 'react'
 // TODO: Add refresh button/toggle
 
 function BikeMarker({ station, status, isNearestBike, isNearestDock }) {
-  const { lat, lon, name, address } = station
+  const { lat, lon, name, address, cross_street } = station
 
   const { num_bikes_available, num_docks_available, last_reported, vehicle_types_available} = status;
   const isNearest = isNearestBike || isNearestDock
@@ -25,6 +25,7 @@ function BikeMarker({ station, status, isNearestBike, isNearestDock }) {
   }, [num_bikes_available, num_docks_available, isNearest])
 
   const oppdatert = new Date(last_reported * 1000).toLocaleString();
+  
   return (
     <Marker 
       position={[lat, lon]} 
@@ -34,12 +35,9 @@ function BikeMarker({ station, status, isNearestBike, isNearestDock }) {
       <Popup>
         <div>
           <h3>{name}</h3>
-          <p>{address}</p>
-          <p>Ledige sykler: {num_bikes_available}</p>
-          <p>Herav esykler: {esykler}</p>
-          <p>Lat: {lat}</p>
-          <p>Lon: {lon}</p>
-          <p>Sist oppdatert: {oppdatert}</p> 
+          <p>{address} ({cross_street})</p>
+          <p>Ledig sykkel: {num_bikes_available} (elektrisk: {esykler})</p>
+          <p>Ledig parkering: {num_docks_available}</p>
         </div>
       </Popup>
     </Marker>

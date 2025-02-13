@@ -13,8 +13,8 @@ export interface AppState {
   stations: Station[];
   stationStatus: Record<string, StationStatus>;
   userPosition: UserPosition | null;
-  nearestBikeStation: Station | null;
-  nearestDockStation: Station | null;
+  nearestBike: Station | null;
+  nearestDock: Station | null;
   isLoading: boolean;
   error: string | null;
 }

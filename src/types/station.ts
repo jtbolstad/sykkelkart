@@ -4,6 +4,8 @@ export interface Station {
   lat: number;
   lon: number;
   capacity: number;
+  address: string; 
+  cross_street: string;
 }
 
 export interface StationStatus {
@@ -14,6 +16,11 @@ export interface StationStatus {
   is_renting: boolean;
   is_returning: boolean;
   last_reported: number;
+  vehicle_types_available: {
+    [key: string]: {
+      count: number;
+    };
+  };
 }
 
 export interface BikeMarkerProps {

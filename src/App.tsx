@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
-import BikeMarker from './components/BikeMarker';
-import UserPositionMarker from './components/UserPositionMarker';
-import { fetchStations, fetchStationStatus } from './services/api';
-import { findNearestBikeStation, findNearestDockStation } from './utils/findNearestStations';
-import { AppState, MapClickHandlerProps, UserPosition } from './types/app';
-import { StationStatus } from './types/station';
-import { LatLngTuple, MapOptions } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet/dist/leaflet.css';
+import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+import BikeMarker from "./components/BikeMarker";
+import UserPositionMarker from "./components/UserPositionMarker";
+import { fetchStations, fetchStationStatus } from "./services/api";
+import {
+  findNearestBike,
+  findNearestDock,
+} from "./utils/findNearestStations";
+import { AppState, MapClickHandlerProps, UserPosition } from "./types/app";
+import { StationStatus } from "./types/station";
+import { LatLngTuple, MapOptions } from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+const testmodus = true;
 
 function MapClickHandler({ setUserPosition }: MapClickHandlerProps) {
   useMapEvents({
@@ -24,10 +28,10 @@ function App() {
     stations: [],
     stationStatus: {},
     userPosition: null,
-    nearestBikeStation: null,
-    nearestDockStation: null,
+    nearestBike: null,
+    nearestDock: null,
     isLoading: true,
-    error: null
+    error: null,
   });
 
   useEffect(() => {
@@ -35,25 +39,28 @@ function App() {
       try {
         const [stations, statusData] = await Promise.all([
           fetchStations(),
-          fetchStationStatus()
+          fetchStationStatus(),
         ]);
-        
-        const stationStatus = statusData.reduce((acc: Record<string, StationStatus>, status: StationStatus) => {
-          acc[status.station_id] = status;
-          return acc;
-        }, {});
 
-        setState(prev => ({
+        const stationStatus = statusData.reduce(
+          (acc: Record<string, StationStatus>, status: StationStatus) => {
+            acc[status.station_id] = status;
+            return acc;
+          },
+          {}
+        );
+
+        setState((prev) => ({
           ...prev,
           stations,
           stationStatus,
-          isLoading: false
+          isLoading: false,
         }));
       } catch (error) {
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
-          error: 'Failed to load station data',
-          isLoading: false
+          error: "Failed to load station data",
+          isLoading: false,
         }));
       }
     };
@@ -63,29 +70,57 @@ function App() {
 
   useEffect(() => {
     if (state.userPosition && state.stations.length > 0) {
-      const nearestBikeStation = findNearestBikeStation(
+      const nearestBike = findNearestBike(
         state.stations,
         state.stationStatus,
         state.userPosition
       );
-      const nearestDockStation = findNearestDockStation(
+      const nearestDock = findNearestDock(
         state.stations,
         state.stationStatus,
         state.userPosition
       );
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
-        nearestBikeStation,
-        nearestDockStation
+        nearestBike,
+        nearestDock,
       }));
     }
   }, [state.userPosition, state.stations, state.stationStatus]);
 
+  useEffect(() => {
+    if (testmodus) {
+      setUserPosition({
+        // Tilfeldige koordinater for testing
+        lng: 10.7 + Math.random() * 0.1,
+        lat: 59.9 + Math.random() * 0.05,
+      });
+      return;
+    }
+
+    // Watch user position
+    if ("geolocation" in navigator) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          setUserPosition({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+
+      return () => navigator.geolocation.clearWatch(watchId);
+    }
+  }, []);
+
   const setUserPosition = (position: UserPosition) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      userPosition: position
+      userPosition: position,
     }));
   };
 
@@ -96,32 +131,48 @@ function App() {
 
   const mapOptions: MapOptions = {
     center: osloCenter,
-    zoom: 13
+    zoom: 13,
   };
 
   return (
-    <MapContainer
-      {...mapOptions}
-      style={{ height: "100vh", width: "100%" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <MapClickHandler setUserPosition={setUserPosition} />
-      {state.userPosition && (
-        <UserPositionMarker position={state.userPosition} />
-      )}
-      {state.stations.map((station) => (
-        <BikeMarker
-          key={station.station_id}
-          station={station}
-          status={state.stationStatus[station.station_id]}
-          isNearestBike={station.station_id === state.nearestBikeStation?.station_id}
-          isNearestDock={station.station_id === state.nearestDockStation?.station_id}
+    <>
+      <div className="infobox">
+        <h1>Oslo Bysykkel</h1>
+        <p>
+          Ledige sykler og parkering på bysykkelstasjoner i Oslo{" "}
+        </p>
+        <p>
+          Nærmeste sykkel: <b>{state.nearestBike?.name}</b>
+        </p>
+        <p>
+          Nærmeste parkering: <b>{state.nearestDock?.name}</b>
+        </p>
+      </div>
+
+      <MapContainer {...mapOptions} style={{ height: "100vh", width: "100%" }}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-      ))}
-    </MapContainer>
+        <MapClickHandler setUserPosition={setUserPosition} />
+        {state.userPosition && (
+          <UserPositionMarker position={state.userPosition} />
+        )}
+        {state.stations.map((station) => (
+          <BikeMarker
+            key={station.station_id}
+            station={station}
+            status={state.stationStatus[station.station_id]}
+            isNearestBike={
+              station.station_id === state.nearestBike?.station_id
+            }
+            isNearestDock={
+              station.station_id === state.nearestDock?.station_id
+            }
+          />
+        ))}
+      </MapContainer>
+    </>
   );
 }
 

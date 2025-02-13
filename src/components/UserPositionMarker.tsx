@@ -8,15 +8,15 @@ interface UserPositionMarkerProps {
 
 function UserPositionMarker({ position }: UserPositionMarkerProps) {
   const userIcon = L.divIcon({
-    className: 'custom-user-icon',
-    html: `<div style="background-color: #0000ff; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>`,
-    iconSize: [16, 16],
-    iconAnchor: [8, 8]
+    className: 'user-position-marker',
+    html: '📍',
+    iconSize: [60, 60],
+    iconAnchor: [30, 30],
   });
 
   return (
     <Marker position={[position.lat, position.lng]} icon={userIcon}>
-      <Popup>Your Location</Popup>
+      <Popup>Her er du</Popup>
     </Marker>
   );
 }

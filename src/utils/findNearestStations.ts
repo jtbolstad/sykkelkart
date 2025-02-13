@@ -2,7 +2,7 @@ import { Station, StationStatus } from '../types/station';
 import { UserPosition } from '../types/app';
 import { calculateDistance } from './stationUtils';
 
-export function findNearestBikeStation(
+export function findNearestBike(
   stations: Station[],
   stationStatus: Record<string, StationStatus>,
   userPosition: UserPosition
@@ -32,7 +32,7 @@ export function findNearestBikeStation(
     }, null as Station | null);
 }
 
-export function findNearestDockStation(
+export function findNearestDock(
   stations: Station[],
   stationStatus: Record<string, StationStatus>,
   userPosition: UserPosition

@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/bikemarker.tsx","./src/components/userpositionmarker.tsx","./src/services/api.ts","./src/types/app.ts","./src/types/station.ts","./src/utils/findneareststations.ts","./src/utils/stationutils.ts"],"version":"5.7.3"}

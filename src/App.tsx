@@ -3,10 +3,7 @@ import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import BikeMarker from "./components/BikeMarker";
 import UserPositionMarker from "./components/UserPositionMarker";
 import { fetchStations, fetchStationStatus } from "./services/api";
-import {
-  findNearestBike,
-  findNearestDock,
-} from "./utils/findNearestStations";
+import { findNearestBike, findNearestDock } from "./utils/findNearestStations";
 import { AppState, MapClickHandlerProps, UserPosition } from "./types/app";
 import { StationStatus } from "./types/station";
 import { LatLngTuple, MapOptions } from "leaflet";
@@ -138,15 +135,15 @@ function App() {
     <>
       <div className="infobox">
         <h1>Oslo Bysykkel</h1>
-        <p>
-          Ledige sykler og parkering på bysykkelstasjoner i Oslo{" "}
-        </p>
-        <p>
-          Nærmeste sykkel: <b>{state.nearestBike?.name}</b>
-        </p>
-        <p>
-          Nærmeste parkering: <b>{state.nearestDock?.name}</b>
-        </p>
+        <ul>
+          <li>Ledige sykler og parkering på bysykkelstasjoner i Oslo</li>
+          <li>
+            Nærmeste sykkel: <b>{state.nearestBike?.name}</b>
+          </li>
+          <li>
+            Nærmeste parkering: <b>{state.nearestDock?.name}</b>
+          </li>
+        </ul>
       </div>
 
       <MapContainer {...mapOptions} style={{ height: "100vh", width: "100%" }}>
@@ -163,12 +160,8 @@ function App() {
             key={station.station_id}
             station={station}
             status={state.stationStatus[station.station_id]}
-            isNearestBike={
-              station.station_id === state.nearestBike?.station_id
-            }
-            isNearestDock={
-              station.station_id === state.nearestDock?.station_id
-            }
+            isNearestBike={station.station_id === state.nearestBike?.station_id}
+            isNearestDock={station.station_id === state.nearestDock?.station_id}
           />
         ))}
       </MapContainer>

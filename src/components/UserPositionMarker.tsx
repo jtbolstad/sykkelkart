@@ -1,6 +1,6 @@
-import { Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import { UserPosition } from '../types/app';
+import { Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+import { UserPosition } from "../types/app";
 
 interface UserPositionMarkerProps {
   position: UserPosition;
@@ -8,10 +8,10 @@ interface UserPositionMarkerProps {
 
 function UserPositionMarker({ position }: UserPositionMarkerProps) {
   const userIcon = L.divIcon({
-    className: 'user-position-marker',
-    html: '📍',
+    className: "user-position-marker",
+    html: "📍",
     iconSize: [60, 60],
-    iconAnchor: [30, 30],
+    iconAnchor: [50, 70],
   });
 
   return (

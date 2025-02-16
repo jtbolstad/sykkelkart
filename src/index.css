@@ -18,15 +18,45 @@ body {
 }
 
 .infobox {
-  width: 300px;
+  width: 250px;
   position: absolute;
   top: 30px;
-  left: 30px;
+  left: 50px;
   z-index: 1000;
   backdrop-filter: blur(10px);
   padding: 20px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+  .infobox {
+    width: 75vw;
+    top: auto;
+    bottom: 10px;
+  }
+
+  h1 {
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  & ul {
+    list-style-type: none;
+    margin-left: 0;
+    padding-inline-start: 0;
+  }
+
+  & li {
+    line-height: 15px;
+    display: inline;
+  }
+
+  & li::after {
+    content: ' '
+  }
+
 }
 
 .user-position-marker {

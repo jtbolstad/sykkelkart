@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
-import BikeMarker from "./components/BikeMarker";
-import UserPositionMarker from "./components/UserPositionMarker";
+import BikeMarker from "./components/bike-marker";
+import UserPositionMarker from "./components/user-position-marker";
 import { fetchStations, fetchStationStatus } from "./services/api";
-import { findNearestBike, findNearestDock } from "./utils/findNearestStations";
+import {
+  findNearestBike,
+  findNearestDock,
+} from "./utils/find-nearest-stations";
 import { AppState, MapClickHandlerProps, UserPosition } from "./types/app";
 import { StationStatus } from "./types/station";
 import { LatLngTuple, MapOptions } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-const testmodus = true;
+const testmodus = location.search === "?clickToSet=true";
 
 function MapClickHandler({ setUserPosition }: MapClickHandlerProps) {
   useMapEvents({

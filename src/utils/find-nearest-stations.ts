@@ -1,6 +1,6 @@
 import { Station, StationStatus } from '../types/station';
 import { UserPosition } from '../types/app';
-import { calculateDistance } from './stationUtils';
+import { calculateDistance } from './station-utils';
 
 export function findNearestBike(
   stations: Station[],
